@@ -1,5 +1,6 @@
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -8,19 +9,19 @@ import java.util.List;
 public class Book {
     protected boolean isItBorrowable;
 
-    protected boolean isItExtendable;
-
     protected List<LibraryMember> membersThatClaimedExtension=new ArrayList<>();
 
     protected AvailableBookTypes bookTypes;
 
     protected LocalDateTime activityTime;
 
-    protected LocalDateTime deadline;
+    protected LocalDate deadline;
 
-    public void borrow()
+    protected LibraryMember byWho;
+
+    public void borrow(LibraryMember libraryMember)
     {
-        isItBorrowable=false;
+        byWho=libraryMember;
     }
 
     public void extend(int extensionAmountForMember,LibraryMember libraryMember) throws NotExtendable {
@@ -32,8 +33,9 @@ public class Book {
         deadline=deadline.plusDays(extensionAmountForMember);
     }
 
-    public void read(String currentDate)
+    public void read(String currentDate, LibraryMember libraryMember)
     {
+        byWho=libraryMember;
         activityTime= LocalDateTime.parse(currentDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 

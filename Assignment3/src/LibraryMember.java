@@ -1,4 +1,4 @@
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ public class LibraryMember {
 
     protected List<Book> borrowedBooks = new ArrayList<>();
 
+    protected List<Book> booksThatAreBeingRead = new ArrayList<>();
     protected float feeToPay;
 
     public LibraryMember(int bookLimit,int timeLimitDay, String representationLetter, List<AvailableBookTypes> allowedBooks) {
@@ -26,8 +27,9 @@ public class LibraryMember {
             throw new YouCanNotTakeThisBook();
         }
         borrowedBooks.add(book);
-        book.borrow();
-        book.deadline= LocalDateTime.parse(currentTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        book.borrow(this);
+        book.deadline= LocalDate.parse(currentTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
     }
 
     public void returnBook(Book book,String currentTime)
@@ -52,10 +54,15 @@ public class LibraryMember {
     }
 
     public void readTheBook(Book book, String currentDate) {
+        if (borrowedBooks.contains(book))
+        {
+            System.out.println("You can not read this book!\n");
+        }
         if (!booksToRead.contains(book.bookTypes))
         {
-            System.out.println("Students can not read handwritten books!");
+            System.out.println("Students can not read handwritten books!\n");
         }
-        book.read(currentDate);
+        booksThatAreBeingRead.add(book);
+        book.read(currentDate,this);
     }
 }

@@ -1,0 +1,10 @@
+addBook	P
+addBook	P
+addBook	H
+addBook	H
+addBook	P
+addMember	S
+addMember	S
+addMember	A
+addMember	A
+borrowBook	1	1	2023-04-07
