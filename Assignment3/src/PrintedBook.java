@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class PrintedBook extends Book{
     private boolean hasBorrowed;
     public PrintedBook()
@@ -7,8 +9,8 @@ public class PrintedBook extends Book{
     }
 
     @Override
-    public void borrow(LibraryMember libraryMember) {
-        super.borrow(libraryMember);
+    public void borrow(LibraryMember libraryMember, LocalDate localDate) {
+        super.borrow(libraryMember,localDate);
         hasBorrowed=true;
     }
 

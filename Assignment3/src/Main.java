@@ -1,9 +1,14 @@
+import java.io.FileWriter;
+import java.io.IOException;
+
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     private  static String[] commandElements;
-    public static void main(String[] args) {
+    public static FileWriter fileWriter;
+    public static void main(String[] args) throws IOException {
         String[] lines=ReadFromFile.readFile("input.txt");
+        fileWriter=new FileWriter("output.txt");
         for (String line: lines) {
             commandElements=line.split("\t");
             switch (commandElements[0])
@@ -32,5 +37,6 @@ public class Main {
                     break;
             }
         }
+        fileWriter.close();
     }
 }

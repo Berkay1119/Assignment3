@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class LibraryMember {
             throw new NoMoreBooks();
         }
         borrowedBooks.add(book);
-        book.borrow(this);
+        book.borrow(this,LocalDate.parse(currentTime, DateTimeFormatter.ISO_LOCAL_DATE));
         book.deadline= LocalDate.parse(currentTime, DateTimeFormatter.ISO_LOCAL_DATE).plusDays(limitDay);
 
     }
@@ -49,14 +50,16 @@ public class LibraryMember {
             book.extend(limitDay,this);
     }
 
-    public void readTheBook(Book book, String currentDate) {
+    public void readTheBook(Book book, String currentDate) throws IOException, NotAllowedBook {
         if (borrowedBooks.contains(book))
         {
-            System.out.println("You can not read this book!\n");
+            Main.fileWriter.write("You can not read this book!\n");
+            throw new NotAllowedBook();
         }
         if (!booksToRead.contains(book.bookTypes))
         {
-            System.out.println("Students can not read handwritten books!");
+            Main.fileWriter.write("Students can not read handwritten books!\n");
+            throw new NotAllowedBook();
         }
         booksThatAreBeingRead.add(book);
         book.read(currentDate,this);

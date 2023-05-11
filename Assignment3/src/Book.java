@@ -20,8 +20,9 @@ public class Book {
 
     protected LibraryMember byWho;
 
-    public void borrow(LibraryMember libraryMember)
+    public void borrow(LibraryMember libraryMember,LocalDate activityTime)
     {
+        this.activityTime=activityTime;
         byWho=libraryMember;
     }
 
