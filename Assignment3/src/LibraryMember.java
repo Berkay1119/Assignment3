@@ -21,14 +21,18 @@ public class LibraryMember {
         booksToRead = allowedBooks;
     }
 
-    public void borrowBook(Book book, String currentTime) throws YouCanNotTakeThisBook {
+    public void borrowBook(Book book, String currentTime) throws YouCanNotTakeThisBook, NoMoreBooks {
         if (!book.isItBorrowable || feeToPay!=0)
         {
             throw new YouCanNotTakeThisBook();
         }
+        if (borrowedBooks.size()>=bookLimit)
+        {
+            throw new NoMoreBooks();
+        }
         borrowedBooks.add(book);
         book.borrow(this);
-        book.deadline= LocalDate.parse(currentTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        book.deadline= LocalDate.parse(currentTime, DateTimeFormatter.ISO_LOCAL_DATE).plusDays(limitDay);
 
     }
 
@@ -37,20 +41,12 @@ public class LibraryMember {
         borrowedBooks.remove(book);
         if (book.returnAndCalculateFee(currentTime)!=0)
         {
-            System.out.println("You must pay a penalty!");
             feeToPay+=book.returnAndCalculateFee(currentTime);
         }
     }
 
-    public void extendBookDeadline(Book book, String currentTime)
-    {
-        try {
+    public void extendBookDeadline(Book book, String currentTime) throws NotExtendable {
             book.extend(limitDay,this);
-        }
-        catch (NotExtendable notExtendable)
-        {
-            System.out.println("You cannot extend the deadline!\n");
-        }
     }
 
     public void readTheBook(Book book, String currentDate) {
@@ -60,7 +56,7 @@ public class LibraryMember {
         }
         if (!booksToRead.contains(book.bookTypes))
         {
-            System.out.println("Students can not read handwritten books!\n");
+            System.out.println("Students can not read handwritten books!");
         }
         booksThatAreBeingRead.add(book);
         book.read(currentDate,this);

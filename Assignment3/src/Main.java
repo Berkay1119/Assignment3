@@ -28,6 +28,7 @@ public class Main {
                     LibrarySystem.readBook(Integer.parseInt(commandElements[1]),Integer.parseInt(commandElements[2]),commandElements[3]);
                     break;
                 case "getTheHistory":
+                    LibrarySystem.getHistory();
                     break;
             }
         }

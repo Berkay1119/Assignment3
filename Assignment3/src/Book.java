@@ -2,6 +2,7 @@
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class Book {
 
     protected AvailableBookTypes bookTypes;
 
-    protected LocalDateTime activityTime;
+    protected LocalDate activityTime;
 
     protected LocalDate deadline;
 
@@ -36,12 +37,16 @@ public class Book {
     public void read(String currentDate, LibraryMember libraryMember)
     {
         byWho=libraryMember;
-        activityTime= LocalDateTime.parse(currentDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        activityTime= LocalDate.parse(currentDate,DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     public float returnAndCalculateFee(String currentTime)
     {
-        LocalDateTime currentDate= LocalDateTime.parse(currentTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return Duration.between(currentDate,deadline).toDays();
+        LocalDate currentDate= LocalDate.parse(currentTime, DateTimeFormatter.ISO_LOCAL_DATE);
+        if (deadline==null)
+        {
+            return 0;
+        }
+        return Math.max(Period.between(deadline, currentDate).getDays(), 0);
     }
 }
